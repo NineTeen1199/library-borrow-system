@@ -10,53 +10,69 @@ st.set_page_config(
 )
 
 # =========================
-# Custom CSS Theme
+# Ultra Modern CSS
 # =========================
 st.markdown("""
 <style>
 
-/* ===== Background ===== */
+/* ===== Animated Gradient Background ===== */
 .stApp {
-    background: linear-gradient(to right, #f4f6f9, #e8f0ff);
+    background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: white;
 }
 
-/* ===== Header ===== */
-h1 {
-    color: #1f4e79;
-    font-weight: 700;
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* ===== Main Container Glass Effect ===== */
+.block-container {
+    background: rgba(255,255,255,0.05);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
 /* ===== Sidebar ===== */
 section[data-testid="stSidebar"] {
-    background-color: #1f4e79;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
 }
 
 section[data-testid="stSidebar"] * {
     color: white !important;
 }
 
-/* ===== Sidebar Buttons ===== */
+/* ===== Buttons ===== */
 div.stButton > button {
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
     padding: 10px;
-    font-weight: 600;
+    font-weight: bold;
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    color: white;
     transition: 0.3s;
 }
 
 div.stButton > button:hover {
-    background-color: #4a90e2;
-    color: white;
-    transform: scale(1.03);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00c6ff;
 }
 
-/* ===== Card Effect ===== */
-.block-container {
-    padding-top: 2rem;
+/* ===== Title ===== */
+h1 {
+    font-weight: 800;
+    text-align: center;
 }
 
+/* ===== Divider ===== */
 hr {
-    border: 1px solid #ddd;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 </style>
@@ -74,13 +90,11 @@ from pages import report_page
 
 
 # =========================
-# Hide Default Multipage Menu
+# Hide Default Multipage
 # =========================
 st.markdown("""
 <style>
 section[data-testid="stSidebarNav"] {display: none;}
-div[data-testid="stSidebarNav"] {display: none;}
-nav[data-testid="stSidebarNav"] {display: none;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -107,58 +121,63 @@ if not st.session_state.is_logged_in:
 
 
 # =========================
-# Header Card
+# Header Section
 # =========================
 st.markdown("""
 <div style="
-    background-color:#1f4e79;
-    padding:20px;
-    border-radius:15px;
-    color:white;
+    padding:25px;
+    border-radius:20px;
     text-align:center;
-    box-shadow:0px 4px 15px rgba(0,0,0,0.2);
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+    margin-bottom:30px;
 ">
-    <h1>📚 ระบบหอสมุดโรงเรียน</h1>
-    <p>Library Borrow & Return Management System</p>
+    <h1>📚 ระบบหอสมุดอัจฉริยะ</h1>
+    <p style='font-size:18px;'>Smart Library Borrow & Return System</p>
 </div>
 """, unsafe_allow_html=True)
 
 
 # =========================
-# Helper Navigation Button
+# Sidebar Profile Card
+# =========================
+user = st.session_state.get("user") or {}
+role = user.get("role", "staff")
+
+st.sidebar.markdown(f"""
+<div style="
+    padding:20px;
+    border-radius:15px;
+    background: linear-gradient(45deg,#00c6ff,#0072ff);
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.4);
+">
+    <h3>👤 {user.get('username','-')}</h3>
+    <p>🔑 {role}</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.sidebar.divider()
+
+
+# =========================
+# Navigation
 # =========================
 def nav_button(label, key, icon=""):
     if st.sidebar.button(f"{icon} {label}", use_container_width=True):
         st.session_state.page = key
         st.rerun()
 
+nav_button("หนังสือ", "books", "📚")
+nav_button("สมาชิก", "members", "👤")
+nav_button("ยืม-คืน", "borrows", "🔄")
 
-# =========================
-# User Info Card
-# =========================
-user = st.session_state.get("user") or {}
-role = user.get("role", "staff")
-
-st.sidebar.markdown("""
-<div style="
-    background-color:#163d5c;
-    padding:15px;
-    border-radius:10px;
-    text-align:center;
-">
-""", unsafe_allow_html=True)
-
-st.sidebar.markdown(f"👤 **{user.get('username','-')}**")
-st.sidebar.markdown(f"🔑 บทบาท: **{role}**")
-
-st.sidebar.markdown("</div>", unsafe_allow_html=True)
+if role == "admin":
+    nav_button("รายงาน", "reports", "📊")
+    nav_button("จัดการผู้ใช้", "admin", "🛠️")
 
 st.sidebar.divider()
 
-
-# =========================
-# Logout
-# =========================
 if st.sidebar.button("🚪 Logout", use_container_width=True):
     st.session_state.is_logged_in = False
     st.session_state.user = None
@@ -167,24 +186,8 @@ if st.sidebar.button("🚪 Logout", use_container_width=True):
 
 
 # =========================
-# Sidebar Menu
+# Routing
 # =========================
-st.sidebar.divider()
-
-nav_button("หนังสือ", "books", "📚")
-nav_button("สมาชิก", "members", "👤")
-nav_button("ยืม-คืน", "borrows", "🔄")
-
-# Admin Menu
-if role == "admin":
-    nav_button("รายงาน", "reports", "📊")
-    nav_button("จัดการผู้ใช้", "admin", "🛠️")
-
-
-# =========================
-# Routing + Guard
-# =========================
-
 if st.session_state.page == "books":
     book_page.render_book_page()
 
@@ -195,21 +198,17 @@ elif st.session_state.page == "borrows":
     borrow_page.render_borrow()
 
 elif st.session_state.page == "reports":
-
     if role != "admin":
-        st.warning("⚠️ หน้านี้สำหรับ Admin เท่านั้น")
+        st.warning("⚠️ Admin Only")
         st.session_state.page = "books"
         st.rerun()
-
     report_page.render_report()
 
 elif st.session_state.page == "admin":
-
     if role != "admin":
-        st.warning("⚠️ หน้านี้สำหรับ Admin เท่านั้น")
+        st.warning("⚠️ Admin Only")
         st.session_state.page = "books"
         st.rerun()
-
     admin_page.render_admin()
 
 else:
@@ -222,8 +221,8 @@ else:
 st.markdown("""
 <hr>
 <center>
-<p style='color:gray; font-size:14px;'>
-© 2026 ระบบหอสมุด | พัฒนาโดย ทีม IT
+<p style='font-size:14px; color:rgba(255,255,255,0.7);'>
+© 2026 Smart Library System | Developed by IT Team
 </p>
 </center>
 """, unsafe_allow_html=True)
