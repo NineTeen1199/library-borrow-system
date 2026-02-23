@@ -10,12 +10,12 @@ st.set_page_config(
 )
 
 # =========================
-# Ultra Modern CSS
+# Custom CSS (Modern Style)
 # =========================
 st.markdown("""
 <style>
 
-/* ===== Animated Gradient Background ===== */
+/* ===== Animated Background ===== */
 .stApp {
     background: linear-gradient(-45deg, #1e3c72, #2a5298, #0f2027, #203a43);
     background-size: 400% 400%;
@@ -29,7 +29,7 @@ st.markdown("""
     100% {background-position: 0% 50%;}
 }
 
-/* ===== Main Container Glass Effect ===== */
+/* ===== Glass Container ===== */
 .block-container {
     background: rgba(255,255,255,0.05);
     padding: 2rem;
@@ -38,36 +38,20 @@ st.markdown("""
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* ===== Sidebar ===== */
-section[data-testid="stSidebar"] {
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(10px);
-}
-
-section[data-testid="stSidebar"] * {
-    color: white !important;
-}
-
 /* ===== Buttons ===== */
 div.stButton > button {
     border-radius: 12px;
-    border: none;
-    padding: 10px;
+    padding: 10px 20px;
     font-weight: bold;
-    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    background: linear-gradient(45deg,#00c6ff,#0072ff);
     color: white;
+    border: none;
     transition: 0.3s;
 }
 
 div.stButton > button:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px #00c6ff;
-}
-
-/* ===== Title ===== */
-h1 {
-    font-weight: 800;
-    text-align: center;
 }
 
 /* ===== Divider ===== */
@@ -87,16 +71,6 @@ from pages import borrow_page
 from pages import admin_page
 from pages import login_page
 from pages import report_page
-
-
-# =========================
-# Hide Default Multipage
-# =========================
-st.markdown("""
-<style>
-section[data-testid="stSidebarNav"] {display: none;}
-</style>
-""", unsafe_allow_html=True)
 
 
 # =========================
@@ -121,7 +95,7 @@ if not st.session_state.is_logged_in:
 
 
 # =========================
-# Header Section
+# Header
 # =========================
 st.markdown("""
 <div style="
@@ -139,50 +113,47 @@ st.markdown("""
 
 
 # =========================
-# Sidebar Profile Card
+# Top Navigation Menu
 # =========================
 user = st.session_state.get("user") or {}
 role = user.get("role", "staff")
 
-st.sidebar.markdown(f"""
-<div style="
-    padding:20px;
-    border-radius:15px;
-    background: linear-gradient(45deg,#00c6ff,#0072ff);
-    text-align:center;
-    box-shadow:0 5px 15px rgba(0,0,0,0.4);
-">
-    <h3>👤 {user.get('username','-')}</h3>
-    <p>🔑 {role}</p>
-</div>
-""", unsafe_allow_html=True)
+col1, col2, col3, col4, col5, col6 = st.columns(6)
 
-st.sidebar.divider()
-
-
-# =========================
-# Navigation
-# =========================
-def nav_button(label, key, icon=""):
-    if st.sidebar.button(f"{icon} {label}", use_container_width=True):
-        st.session_state.page = key
+with col1:
+    if st.button("📚 หนังสือ", use_container_width=True):
+        st.session_state.page = "books"
         st.rerun()
 
-nav_button("หนังสือ", "books", "📚")
-nav_button("สมาชิก", "members", "👤")
-nav_button("ยืม-คืน", "borrows", "🔄")
+with col2:
+    if st.button("👤 สมาชิก", use_container_width=True):
+        st.session_state.page = "members"
+        st.rerun()
+
+with col3:
+    if st.button("🔄 ยืม-คืน", use_container_width=True):
+        st.session_state.page = "borrows"
+        st.rerun()
 
 if role == "admin":
-    nav_button("รายงาน", "reports", "📊")
-    nav_button("จัดการผู้ใช้", "admin", "🛠️")
+    with col4:
+        if st.button("📊 รายงาน", use_container_width=True):
+            st.session_state.page = "reports"
+            st.rerun()
 
-st.sidebar.divider()
+    with col5:
+        if st.button("🛠️ จัดการผู้ใช้", use_container_width=True):
+            st.session_state.page = "admin"
+            st.rerun()
 
-if st.sidebar.button("🚪 Logout", use_container_width=True):
-    st.session_state.is_logged_in = False
-    st.session_state.user = None
-    st.session_state.page = "books"
-    st.rerun()
+with col6:
+    if st.button("🚪 Logout", use_container_width=True):
+        st.session_state.is_logged_in = False
+        st.session_state.user = None
+        st.session_state.page = "books"
+        st.rerun()
+
+st.markdown("<hr>", unsafe_allow_html=True)
 
 
 # =========================
@@ -222,7 +193,10 @@ st.markdown("""
 <hr>
 <center>
 <p style='font-size:14px; color:rgba(255,255,255,0.7);'>
-© 2026 Smart Library System | Developed by IT Team
+👤 ผู้ใช้: {username} | 🔑 บทบาท: {role}
+</p>
+<p style='font-size:13px; color:rgba(255,255,255,0.5);'>
+© 2026 Smart Library System
 </p>
 </center>
-""", unsafe_allow_html=True)
+""".format(username=user.get("username","-"), role=role), unsafe_allow_html=True)
