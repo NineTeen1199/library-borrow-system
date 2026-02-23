@@ -8,7 +8,16 @@ st.set_page_config(
     page_icon="📚",
     layout="wide"
 )
-
+# =========================
+# Hide Default Sidebar Menu
+# =========================
+st.markdown("""
+<style>
+section[data-testid="stSidebarNav"] {display: none;}
+div[data-testid="stSidebarNav"] {display: none;}
+nav[data-testid="stSidebarNav"] {display: none;}
+</style>
+""", unsafe_allow_html=True)
 # =========================
 # Custom CSS (Modern Style)
 # =========================
