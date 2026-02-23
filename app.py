@@ -10,7 +10,42 @@ st.set_page_config(
 )
 
 # =========================
-# Custom CSS (Modern Button Upgrade)
+# Force Hide Sidebar Completely
+# =========================
+st.markdown("""
+<style>
+
+/* ซ่อน sidebar ทั้งหมด */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+
+/* ขยาย content ให้เต็มจอ */
+[data-testid="stAppViewContainer"] {
+    margin-left: 0rem !important;
+}
+
+/* เอาพื้นที่ว่างด้านซ้ายออก */
+.main .block-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# =========================
+# Hide Default Sidebar Menu
+# =========================
+st.markdown("""
+<style>
+section[data-testid="stSidebarNav"] {display: none;}
+div[data-testid="stSidebarNav"] {display: none;}
+nav[data-testid="stSidebarNav"] {display: none;}
+</style>
+""", unsafe_allow_html=True)
+# =========================
+# Custom CSS (Modern Style)
 # =========================
 st.markdown("""
 <style>
@@ -38,68 +73,20 @@ st.markdown("""
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* ===== Default Button ===== */
+/* ===== Buttons ===== */
 div.stButton > button {
-    border-radius: 14px;
-    padding: 12px 22px;
+    border-radius: 12px;
+    padding: 10px 20px;
     font-weight: bold;
-    font-size: 15px;
+    background: linear-gradient(45deg,#00c6ff,#0072ff);
+    color: white;
     border: none;
-    transition: 0.3s ease;
+    transition: 0.3s;
 }
 
-/* ===== Save Buttons (Green) ===== */
-button:has(span:contains("บันทึกข้อมูลสมาชิก")),
-button:has(span:contains("บันทึกการแก้ไข")),
-button:has(span:contains("บันทึกข้อมูลผู้ใช้ใหม่")) {
-    background: linear-gradient(45deg,#00b09b,#00ff95);
-    color: black;
-}
-button:has(span:contains("บันทึกข้อมูลสมาชิก")):hover,
-button:has(span:contains("บันทึกการแก้ไข")):hover,
-button:has(span:contains("บันทึกข้อมูลผู้ใช้ใหม่")):hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #00ff95;
-}
-
-/* ===== Clear Form (Red) ===== */
-button:has(span:contains("ล้างฟอร์ม")) {
-    background: linear-gradient(45deg,#ff416c,#ff4b2b);
-    color: white;
-}
-button:has(span:contains("ล้างฟอร์ม")):hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #ff4b2b;
-}
-
-/* ===== Edit (Orange) ===== */
-button:has(span:contains("บันทึกการแก้ไข")) {
-    background: linear-gradient(45deg,#f7971e,#ffd200);
-    color: black;
-}
-
-/* ===== CSV (Blue) ===== */
-button:has(span:contains("CSV")) {
-    background: linear-gradient(45deg,#2193b0,#6dd5ed);
-    color: black;
-}
-
-/* ===== Excel (Dark Green) ===== */
-button:has(span:contains("Excel")) {
-    background: linear-gradient(45deg,#11998e,#38ef7d);
-    color: black;
-}
-
-/* ===== PDF (Dark Red) ===== */
-button:has(span:contains("PDF")) {
-    background: linear-gradient(45deg,#cb2d3e,#ef473a);
-    color: white;
-}
-
-/* ===== Hover Effect for All ===== */
 div.stButton > button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00c6ff;
 }
 
 /* ===== Divider ===== */
