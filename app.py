@@ -8,6 +8,32 @@ st.set_page_config(
     page_icon="📚",
     layout="wide"
 )
+
+# =========================
+# Force Hide Sidebar Completely
+# =========================
+st.markdown("""
+<style>
+
+/* ซ่อน sidebar ทั้งหมด */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+
+/* ขยาย content ให้เต็มจอ */
+[data-testid="stAppViewContainer"] {
+    margin-left: 0rem !important;
+}
+
+/* เอาพื้นที่ว่างด้านซ้ายออก */
+.main .block-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # =========================
 # Hide Default Sidebar Menu
 # =========================
