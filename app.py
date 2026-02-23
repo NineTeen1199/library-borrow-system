@@ -44,6 +44,7 @@ div[data-testid="stSidebarNav"] {display: none;}
 nav[data-testid="stSidebarNav"] {display: none;}
 </style>
 """, unsafe_allow_html=True)
+
 # =========================
 # Custom CSS (Modern Style)
 # =========================
@@ -73,20 +74,26 @@ st.markdown("""
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-/* ===== Buttons ===== */
+/* ===== Buttons (NEW STYLE) ===== */
 div.stButton > button {
     border-radius: 12px;
     padding: 10px 20px;
     font-weight: bold;
-    background: linear-gradient(45deg,#00c6ff,#0072ff);
+    background-color: #1E90FF;   /* ฟ้า */
     color: white;
     border: none;
-    transition: 0.3s;
+    transition: 0.3s ease;
 }
 
 div.stButton > button:hover {
+    background-color: black;     /* ดำ */
+    color: white;
     transform: scale(1.05);
-    box-shadow: 0 0 15px #00c6ff;
+}
+
+div.stButton > button:active {
+    background-color: #111;
+    transform: scale(0.98);
 }
 
 /* ===== Divider ===== */
@@ -107,7 +114,6 @@ from pages import admin_page
 from pages import login_page
 from pages import report_page
 
-
 # =========================
 # Session State
 # =========================
@@ -120,14 +126,12 @@ if "user" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "books"
 
-
 # =========================
 # Login Gate
 # =========================
 if not st.session_state.is_logged_in:
     login_page.render_login()
     st.stop()
-
 
 # =========================
 # Header
@@ -145,7 +149,6 @@ st.markdown("""
     <p style='font-size:18px;'>Smart Library Borrow & Return System</p>
 </div>
 """, unsafe_allow_html=True)
-
 
 # =========================
 # Top Navigation Menu
@@ -190,7 +193,6 @@ with col6:
 
 st.markdown("<hr>", unsafe_allow_html=True)
 
-
 # =========================
 # Routing
 # =========================
@@ -219,7 +221,6 @@ elif st.session_state.page == "admin":
 
 else:
     book_page.render_book_page()
-
 
 # =========================
 # Footer
